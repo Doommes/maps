@@ -46,7 +46,7 @@ public class BaseMapActivity extends AppCompatActivity implements BaseView{
         mMapView = findViewById(R.id.mv_map);
         mMapView.onCreate(savedInstanceState);
         initView();
-        initData();
+        //initData();
     }
 
     public void initView() {

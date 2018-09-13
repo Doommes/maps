@@ -3,6 +3,7 @@ package com.example.administrator.maps.main;
 import android.Manifest;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.location.Location;
 import android.support.v4.app.Fragment;
@@ -42,6 +43,7 @@ import com.example.administrator.maps.init.util.Tools;
 import com.example.administrator.maps.love.LoveActivity;
 import com.example.administrator.maps.search.SearchFragment;
 import com.example.administrator.maps.main.model.LovePoi;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +74,8 @@ public class MainActivity extends BaseMapActivity implements MainContract.view {
     private String TAG = "MainActivity";
 
     private String[] mPermissions = {Manifest.permission.READ_PHONE_STATE, Manifest.permission.ACCESS_FINE_LOCATION};
+
+    final RxPermissions rxPermissions = new RxPermissions(this);
     //全局变量
     private MyApplication mApplication;
     //presenter
@@ -124,10 +128,22 @@ public class MainActivity extends BaseMapActivity implements MainContract.view {
         return R.layout.activity_main;
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void initView() {
         //permission
-        requestRuntimePermissions(mPermissions);
+        //requestRuntimePermissions(mPermissions);
+        rxPermissions
+                .request(Manifest.permission.READ_PHONE_STATE
+                        ,Manifest.permission.ACCESS_FINE_LOCATION)
+                .subscribe(gtanted -> {
+                   if (gtanted){
+                       initData();
+                   }else {
+
+                   }
+                });
+
         //初始化Bmob(云端数据库)
         //Bmob.initialize(this, BaseConfig.BMOB_APP_KEY);
     }
